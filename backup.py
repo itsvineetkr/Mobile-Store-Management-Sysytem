@@ -511,6 +511,8 @@ def login_page():
 
 db=mysql.connect(host='localhost',user='root',passwd='admin',database='msms')
 db2=mysql.connect(host='localhost',user='root',passwd='admin',database='userdata')
+
+
 if db.is_connected() and db2.is_connected():
     print('Connections established')
     cur=db.cursor()

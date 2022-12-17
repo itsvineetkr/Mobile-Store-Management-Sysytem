@@ -25,8 +25,7 @@ def add_item():
     price = input("Enter price: ")
     info = input("Any additional info: ")
     stock = input("Enter stock: ")
-    q1 = "insert into items values('{}','{}','{}',{},{},{},'{}','{}','{}',{},'{}','{}',{},'{}')"\
-    .format(
+    q1 = "insert into items values('{}','{}','{}',{},{},{},'{}','{}','{}',{},'{}','{}',{},'{}')".format(
         itemid,
         comp,
         model,
@@ -352,8 +351,8 @@ def alter_user(task):
 def user_page(userid, username, password):
     """
     This method is for user interface
-    There is a while loop which will run till user types "exit". 
-    It is a menu driven code which will ask for user's choice 
+    There is a while loop which will run till user types "exit".
+    It is a menu driven code which will ask for user's choice
     (numbers from 1 to 6 assigned for different things) and will perform various tasks.
     If user chooses option 6 (to return to login page) then this function will call login_page()
     If user enters exit then this function will end.
@@ -408,10 +407,12 @@ def user_page(userid, username, password):
 def admin_page(password):
     """
     This method will generate:
-    A while loop will start which will run till user types "exit". It is a menu driven code which
-    will ask for user's choice (numbers from 1 to 9 assigned for different things) and will perform
-    various tasks. If user chooses option 9 (to return to login page) then this function will call
-    it self again if user enters exit then this function will end and will return None
+    A while loop will start which will run till user types "exit".
+    It is a menu driven code which will ask for user's choice
+    (numbers from 1 to 9 assigned for different things) and will perform
+    various tasks. If user chooses option 9 (to return to login page)
+    then this function will call it self again if user enters exit
+    then this function will end and will return None
 
     Args = password
     Returns = None
@@ -442,22 +443,18 @@ def admin_page(password):
         print()
         c = input("Enter what you have choosen: ")
 
-        if c == "1":
-            add_item()
-        elif c == "2":
-            see_item()
-        elif c == "3":
-            update_spec()
-        elif c == "4":
-            update_stocks()
-        elif c == "5":
-            delete_items()
-        elif c == "6":
+        switch = {
+            "1": add_item,
+            "2": see_item,
+            "3": update_spec,
+            "4": update_stocks,
+            "5": delete_items,
+            "7": see_login_history,
+            "8": see_stocks,
+        }
+
+        if c == "6":
             change_pass(1000, password)
-        elif c == "7":
-            see_login_history()
-        elif c == "8":
-            see_stocks()
         elif c == "9":
             cur.execute("select * from revenue")
             d = cur.fetchall()[0][0]
@@ -478,27 +475,34 @@ def admin_page(password):
             return None
         elif c == "exit":
             break
+        else:
+            switch.get(c)()
 
 
 def login_page():
     """
     This method is for login interface
-    Here we are running menu function and saving its returned value in a variable
-    named choice. Here choice can contain (admin, user or new).
+    Here we are running menu function and saving its returned value
+    in a variable named choice.
+    Here choice can contain (admin, user or new).
 
     Then we are applying conditions.
 
-    If choice is admin then we will ask for password and will match it with the fetched
-    passwords from creds table and if password is right then it will call admin_page function
+    If choice is admin then we will ask for password and will
+    match it with the fetched passwords from creds table and
+    if password is right then it will call admin_page function
 
-    If choice is user then we will take username as input and will check if it exists
-    it it exists then we will take password and then match it with data in creds and
+    If choice is user then we will take username as input
+    and will check if it exists it it exists then we will
+    take password and then match it with data in creds and
     if it is correct then userpage function will run.
 
-    If choice is new then we will take new username and check if it already exists or not
-    if it does then a message will display that user already exists and if not then we will
-    generate a new userid and update users table, creds table and create a new table in
-    userdata database and name it as user's name.
+    If choice is new then we will take new username and check
+    if it already exists or not if it does then a message will
+    display that user already exists and if not then we will
+    generate a new userid and update users table, creds table
+    and create a new table in userdata database and
+    name it as user's name.
 
     Args = None
     Returns = None
@@ -545,8 +549,9 @@ def login_page():
                     "insert into users values({},'{}')".format(userid, username)
                 )
                 cur2.execute(
-                    "create table {}(itemid varchar(5) primary key,company varchar(20),model varchar(20))"\
-                    .format(username)
+                    "create table {}(itemid varchar(5) primary key,company varchar(20),model varchar(20))".format(
+                        username
+                    )
                 )
                 db.commit()
                 print(
@@ -607,8 +612,10 @@ def login_page():
         return None
 
 
-if __name__=="__main__":
-    mysqlpass = input("Enter your mySQL password (if there is no password type clear) : ")
+if __name__ == "__main__":
+    mysqlpass = input(
+        "Enter your mySQL password (if there is no password type clear) : "
+    )
     mysqlpass = "" if mysqlpass == "clear" else mysqlpass
     db = mysql.connect(host="localhost", user="root", passwd=mysqlpass, database="msms")
     db2 = mysql.connect(
