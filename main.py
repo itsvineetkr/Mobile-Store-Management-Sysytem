@@ -259,12 +259,15 @@ def append_wishlist(username, itemid):
     Args = username, itemid
     Returns = None
     """
-    cur.execute("select * from items where itemid='{}'".format(itemid))
-    d = cur.fetchall()[0]
-    cur2.execute(
-        "insert into {} values('{}','{}','{}')".format(username, d[0], d[1], d[2])
-    )
-    db2.commit()
+   try:
+        cur.execute("select * from items where itemid='{}'".format(itemid))
+        d = cur.fetchall()[0]
+        cur2.execute(
+            "insert into {} values('{}','{}','{}')".format(username, d[0], d[1], d[2])
+        )
+        db2.commit()
+    except:
+        print("Given item id doesn't exist!")
 
 
 def see_wishlist(username):
